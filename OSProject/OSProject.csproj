@@ -96,6 +96,16 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="account.png" />
+    <Resource Include="folders.png" />
+    <Resource Include="general.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="download.png" />
+    <Resource Include="pen.png" />
+    <Resource Include="trash.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="share.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

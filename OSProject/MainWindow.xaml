@@ -6,30 +6,63 @@
         xmlns:local="clr-namespace:OSProject"
         mc:Ignorable="d"
         Title="MainWindow" Height="700" Width="1000">
-    <Grid x:Name="MainRoot" Background="white" Margin="0,1,0,-1">
+    <Grid x:Name="MainRoot" Background="white" >
         <Grid.RowDefinitions>
-            <RowDefinition Height="78*"/>
-            <RowDefinition Height="77*"/>
-            <RowDefinition Height="55*"/>
-            <RowDefinition Height="105*"/>
-            <RowDefinition Height="104*"/>
+            <RowDefinition Height="61*"/>
+            <RowDefinition Height="31*"/>
+            <RowDefinition Height="31*"/>
+            <RowDefinition Height="31*"/>
+            <RowDefinition Height="31*"/>
+            <RowDefinition Height="63*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="25*"/>
+            <RowDefinition Height="25*"/>
+            <RowDefinition Height="25*"/>
+            <RowDefinition Height="25*"/>
+            <RowDefinition Height="25*"/>
+            <RowDefinition Height="25*"/>
+            <RowDefinition Height="266*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="114*"/>
-            <ColumnDefinition Width="205*"/>
-            <ColumnDefinition Width="342*"/>
-            <ColumnDefinition Width="331*"/>
+            <ColumnDefinition Width="91*"/>
+            <ColumnDefinition Width="198*"/>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="467*"/>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="26*"/>
+            <ColumnDefinition Width="200*"/>
         </Grid.ColumnDefinitions>
 
-        <Rectangle Fill="#5DA892" IsHitTestVisible="False" Grid.Column="0" Margin="0,124,0,0.057" Grid.RowSpan="2" RadiusX="25" />
-        <Rectangle Fill="#5DA892" IsHitTestVisible="False" Grid.Column="1" Grid.Row="0" Margin="0,0,0,0.057"/>
-        <Rectangle Fill="#5DA892" IsHitTestVisible="False" Grid.Column="1" Margin="0,124,0,0.057" Grid.RowSpan="2"/>
-        <Rectangle Fill="#5DA892" IsHitTestVisible="False" Grid.Column="0" Grid.Row="0" Margin="0,0,0,0.057"/>
+        <Rectangle Fill="#5DA892" IsHitTestVisible="False" Grid.Column="0" Grid.Row="0" Grid.RowSpan="6" Grid.ColumnSpan="2"/>
+        <Rectangle Fill="#5DA892" IsHitTestVisible="False" Grid.Column="0" Grid.Row="7" Grid.RowSpan="6" />
+        <Rectangle Fill="#5DA892" Grid.Row="1" Grid.Column="5" Grid.RowSpan="4" RadiusX="25" RadiusY="34" Margin="0, 0, 15, 0" Grid.ColumnSpan="2"/>
 
-        <TextBlock Grid.Row="0" Grid.Column="1" Text="Имя" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontSize="28" FontFamily="El Messiri" Height="37" Margin="0,0,0,0.057" Width="55" />
-        <TextBlock Grid.Column="1" Text="username@gmail.com" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="18" Height="24" Margin="0,124,0,0" Grid.RowSpan="2" Width="177" />
+        <TextBlock Text="Файлы" Grid.Column="3" VerticalAlignment="Center" Margin="10,14,0,15" FontSize="24" Foreground="#FF5DA892" Height="32" />
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="Имя" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontSize="28" FontFamily="El Messiri" Height="37" Width="55" Foreground="White" Grid.RowSpan="2" />
+        <TextBlock Grid.Column="1" Text="username@gmail.com" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="18" Height="24" Width="177" Grid.Row="3" Foreground="White" />
+        <TextBlock Text="Название файла" Grid.Column="5" VerticalAlignment="Center" Margin="10,18,0,19" FontSize="18" Height="24" Grid.ColumnSpan="2"/>
 
-        <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Source="account.png" Width="60" Height="60" Margin="22,94,32,93.057" />
+        <TextBlock Text="Формат файла:" Grid.Row="1" Grid.Column="5" VerticalAlignment="Center" FontSize="12" Margin="20,7,0,8" Foreground="White" Grid.ColumnSpan="2" Height="16"/>
+        <TextBlock Text="Размер файла:" Grid.Row="2" Grid.Column="5" VerticalAlignment="Center" FontSize="12" Margin="20,8,0,7" Foreground="White" Grid.ColumnSpan="2" Height="16"/>
+        <TextBlock Text="Загрузил:" Grid.Row="3" Grid.Column="5" VerticalAlignment="Center" FontSize="12" Margin="20,7,0,8" Foreground="White" Grid.ColumnSpan="2" Height="16"/>
+        <TextBlock Text="Дата загрузки:" Grid.Row="4" Grid.Column="5" VerticalAlignment="Center" FontSize="12" Margin="20,8,0,7" Foreground="White" Grid.ColumnSpan="2" Height="16"/>
 
+        <TextBlock Text="Скачать" Grid.Row="7" Grid.Column="6" VerticalAlignment="Center" FontSize="12" Margin="20,5,0,4" Height="16"/>
+        <TextBlock Text="Переименовать" Grid.Row="8" Grid.Column="6" VerticalAlignment="Center" FontSize="12" Margin="20,4,0,5" Height="16"/>
+        <TextBlock Text="Открыть доступ" Grid.Row="9" Grid.Column="6" VerticalAlignment="Center" FontSize="12" Margin="20,5,0,4" Height="16"/>
+        <TextBlock Text="Удалить" Grid.Row="10" Grid.Column="6" VerticalAlignment="Center" FontSize="12" Margin="20,4,0,5" Height="16"/>
+
+        <Image Grid.Row="2" Grid.Column="0" Grid.RowSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Source="account.png" Width="40" Height="40" Margin="26,16,25,6" />
+        <Image Grid.Row="7" HorizontalAlignment="Center" VerticalAlignment="Center" Source="folders.png" Width="30" Height="30" Margin="30,10,31,10" Grid.RowSpan="2"/>
+        <Image Grid.Row="9" HorizontalAlignment="Center" VerticalAlignment="Center" Source="general.png" Width="30" Height="30" Margin="30,11,31,9" Grid.RowSpan="2"/>
+        <Image Grid.Row="11" HorizontalAlignment="Center" VerticalAlignment="Center" Source="account.png" Width="30" Height="30" Margin="30,11,31,9" Grid.RowSpan="2"/>
+        <Image Grid.Row="7" Grid.Column="5" Source="download.png"/>
+        <Image Grid.Row="8" Grid.Column="5" Source="pen.png"/>
+        <Image Grid.Row="9" Grid.Column="5" Source="share.png"/>
+        <Image Grid.Row="10" Grid.Column="5" Source="trash.png"/>
+
+        <Button Grid.Row="7" Grid.Column="1" Style="{StaticResource BorderlessButton}" HorizontalContentAlignment="Left" Content="Файлы" Background="#5DA892" Foreground="White" Width="Auto" Grid.RowSpan="2"/>
+        <Button Grid.Row="9" Grid.Column="1" Style="{StaticResource BorderlessButton}" HorizontalContentAlignment="Left" Content="Общее" Background="#5DA892" Foreground="White" Margin="0" Width="Auto" Grid.RowSpan="2"/>
+        <Button Grid.Row="11" Grid.Column="1" Style="{StaticResource BorderlessButton}" HorizontalContentAlignment="Left" Content="Аккаунт" Background="#5DA892" Foreground="White" Margin="0" Width="Auto" Grid.RowSpan="2"/>
     </Grid>
 </Window>
