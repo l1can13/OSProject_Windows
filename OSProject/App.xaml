@@ -32,5 +32,13 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style TargetType="{x:Type ListViewItem}" x:Key="ListViewItemStyle">
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="true" >
+                    <Setter Property="Background" Value="#18474D" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Application.Resources>
 </Application>
