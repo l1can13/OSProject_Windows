@@ -38,20 +38,20 @@
         <Rectangle Fill="#5DA892" IsHitTestVisible="False" Grid.Column="0" Grid.Row="0" Grid.RowSpan="6" Grid.ColumnSpan="2"/>
         <Rectangle Fill="#5DA892" Grid.Row="1" Grid.Column="6" Grid.RowSpan="4" RadiusX="25" RadiusY="34" Grid.ColumnSpan="2"/>
 
-        <TextBlock x:Name="titleTextBlock" Text="Файлы" Grid.Column="3" VerticalAlignment="Center" FontSize="24" Foreground="#FF5DA892" Height="32" Grid.ColumnSpan="2" Margin="0,14,0,15" />
-        <TextBlock x:Name="usernameTextBlock" Grid.Row="2" Grid.Column="1" Text="Имя" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontSize="24" FontFamily="El Messiri" Foreground="White" Height="29" Width="47" />
-        <TextBlock x:Name="userEmailTextBlock" Grid.Column="1" Grid.Row="3" Text="username@gmail.com" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="18" Foreground="White" Height="24" Width="177" />
-        <TextBlock x:Name="filenameTextBlock" Text="Название файла" Grid.Column="6" VerticalAlignment="Center" Margin="10,18,0,19" FontSize="18" Height="24" Grid.ColumnSpan="2"/>
+        <TextBlock x:Name="titleTextBlock" Text="Файлы" Grid.Column="3" VerticalAlignment="Center" FontSize="24" Foreground="#FF5DA892" Grid.ColumnSpan="2" Margin="15,0,0,0" />
+        <TextBlock x:Name="usernameTextBlock" Grid.Row="2" Grid.Column="1" Text="Имя" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontSize="24" FontFamily="El Messiri" Foreground="White" />
+        <TextBlock x:Name="userEmailTextBlock" Grid.Column="1" Grid.Row="3" Text="username@gmail.com" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="18" Foreground="White" />
+        <TextBlock x:Name="filenameTextBlock" Text="Название файла" Grid.Column="6" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="18" Grid.ColumnSpan="2"/>
 
-        <TextBlock Text="Формат файла:" Grid.Row="1" Grid.Column="6" VerticalAlignment="Center" FontSize="12" Margin="20,7,0,8" Foreground="White" Grid.ColumnSpan="2" Height="16"/>
-        <TextBlock Text="Размер файла:" Grid.Row="2" Grid.Column="6" VerticalAlignment="Center" FontSize="12" Margin="20,8,0,7" Foreground="White" Grid.ColumnSpan="2" Height="16"/>
-        <TextBlock Text="Загрузил:" Grid.Row="3" Grid.Column="6" VerticalAlignment="Center" FontSize="12" Margin="20,7,0,8" Foreground="White" Grid.ColumnSpan="2" Height="16"/>
-        <TextBlock Text="Дата загрузки:" Grid.Row="4" Grid.Column="6" VerticalAlignment="Center" FontSize="12" Margin="20,8,0,7" Foreground="White" Grid.ColumnSpan="2" Height="16"/>
+        <TextBlock Text="Формат файла:" Grid.Row="1" Grid.Column="6" VerticalAlignment="Center" FontSize="12" Margin="20,0,0,0" Foreground="White" Grid.ColumnSpan="2" />
+        <TextBlock Text="Размер файла:" Grid.Row="2" Grid.Column="6" VerticalAlignment="Center" FontSize="12" Margin="20,0,0,0" Foreground="White" Grid.ColumnSpan="2" />
+        <TextBlock Text="Загрузил:" Grid.Row="3" Grid.Column="6" VerticalAlignment="Center" FontSize="12" Margin="20,0,0,0" Foreground="White" Grid.ColumnSpan="2" />
+        <TextBlock Text="Дата загрузки:" Grid.Row="4" Grid.Column="6" VerticalAlignment="Center" FontSize="12" Margin="20,0,0,0" Foreground="White" Grid.ColumnSpan="2" />
 
-        <TextBlock Text="Скачать" Grid.Row="7" Grid.Column="7" VerticalAlignment="Center" FontSize="12" Margin="15,5,0,4" Height="16" />
-        <TextBlock Text="Переименовать" Grid.Row="8" Grid.Column="7" VerticalAlignment="Center" FontSize="12" Margin="15,5,0,4" Height="16" />
-        <TextBlock Text="Открыть доступ" Grid.Row="9" Grid.Column="7" VerticalAlignment="Center" FontSize="12" Margin="15,5,0,4" Height="16" />
-        <TextBlock Text="Удалить" Grid.Row="10" Grid.Column="7" VerticalAlignment="Center" FontSize="12" Margin="15,5,0,4" Height="16" />
+        <TextBlock Text="Скачать" Grid.Row="7" Grid.Column="7" VerticalAlignment="Center" FontSize="12" Margin="15,0,0,0" />
+        <TextBlock Text="Переименовать" Grid.Row="8" Grid.Column="7" VerticalAlignment="Center" FontSize="12" Margin="15,0,0,0" />
+        <TextBlock Text="Открыть доступ" Grid.Row="9" Grid.Column="7" VerticalAlignment="Center" FontSize="12" Margin="15,0,0,0" />
+        <TextBlock Text="Удалить" Grid.Row="10" Grid.Column="7" VerticalAlignment="Center" FontSize="12" Margin="15,0,0,0" />
 
         <Image Grid.Row="2" Grid.RowSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Source="account.png" Width="40" Height="40" Margin="26,11,25,11" />
         <Image Grid.Row="7" Grid.Column="6" Source="download.png" />
@@ -59,13 +59,34 @@
         <Image Grid.Row="9" Grid.Column="6" Source="share.png" />
         <Image Grid.Row="10" Grid.Column="6" Source="trash.png" />
 
-        <Button x:Name="addButton" Grid.Row="3" Grid.Column="3" Background="#5DA892" Content="Добавить" Foreground="White" Click="addButton_Click"/>
+        <Button x:Name="addButton" Grid.Row="3" Grid.Column="3" Margin="15, 0, 0, 0" Background="#5DA892" Content="Добавить" Foreground="White" Click="addButton_Click"/>
 
-        <Border Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" CornerRadius="13" BorderBrush="#5DA892" BorderThickness="2">
+        <ListView x:Name="sideMenu" BorderThickness="0" Grid.Row="7" Grid.ColumnSpan="2" Grid.RowSpan="5" Background="#5DA892">
+            <ListViewItem x:Name="filesItem" Height="40">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="folders.png" VerticalAlignment="Center"/>
+                    <TextBlock Text="Файлы" VerticalAlignment="Center" Margin="25, 0, 0, 0" Foreground="white" FontSize="14" FontFamily="el_messiri"/>
+                </StackPanel>
+            </ListViewItem>
+            <ListViewItem x:Name="generalItem" Height="40">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="general.png" VerticalAlignment="Center"/>
+                    <TextBlock Text="Общее" VerticalAlignment="Center" Margin="25, 0, 0, 0" Foreground="white" FontSize="14" FontFamily="el_messiri"/>
+                </StackPanel>
+            </ListViewItem>
+            <ListViewItem x:Name="accountItem" Height="40">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="account.png" VerticalAlignment="Center"/>
+                    <TextBlock Text="Аккаунт" VerticalAlignment="Center" Margin="25, 0, 0, 0" Foreground="white" FontSize="14" FontFamily="el_messiri"/>
+                </StackPanel>
+            </ListViewItem>
+        </ListView>
+
+        <Border Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Margin="15, 0, 15, 0" CornerRadius="13" BorderBrush="#5DA892" BorderThickness="2">
             <TextBox x:Name="findBox" BorderThickness="0" VerticalContentAlignment="Center" Foreground="Gray" Background="Transparent" Margin="5, 5, 5, 5"/>
         </Border>
 
-        <ListView x:Name="listViewFiles" Grid.Row="5" Grid.Column="3" Grid.ColumnSpan="2" Grid.RowSpan="9" >
+        <ListView x:Name="listViewFiles" Grid.Row="5" Grid.Column="3" Grid.ColumnSpan="2" Grid.RowSpan="9" BorderThickness="0">
 
         </ListView>
     </Grid>

@@ -25,6 +25,14 @@ namespace OSProject
         {
             InitializeComponent();
 
+            AuthWindow authWindow = new AuthWindow();
+            if(authWindow.ShowDialog() == true)
+            {
+
+            }
+
+            sideMenu.SelectedItem = filesItem;
+
             List<string> filenamesList = new List<string>();
             filenamesList.Add("hello1");
             filenamesList.Add("hello2");

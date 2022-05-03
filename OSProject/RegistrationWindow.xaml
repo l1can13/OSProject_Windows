@@ -1,0 +1,39 @@
+﻿<Window x:Class="OSProject.RegistrationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:OSProject"
+        mc:Ignorable="d"
+        Title="RegistrationWindow" Height="600" Width="400" ResizeMode="NoResize">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="117*"/>
+            <RowDefinition Height="45*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="45*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="45*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="45*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="45*"/>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="187*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <TextBox FontSize="11" Grid.Row="1" Grid.Column="1" Style="{StaticResource MyWaterMarkStyle}" Tag="Имя пользователя"/>
+        <TextBox FontSize="11" Grid.Row="3" Grid.Column="1" Style="{StaticResource MyWaterMarkStyle}" Tag="Электронная почта"/>
+        <TextBox FontSize="11" Grid.Row="5" Grid.Column="1" Style="{StaticResource MyWaterMarkStyle}" Tag="Номер телефона"/>
+        <TextBox FontSize="11" Grid.Row="7" Grid.Column="1" Style="{StaticResource MyWaterMarkStyle}" Tag="Пароль"/>
+
+        <Button Grid.Row="9" Grid.Column="1" Background="#5DA892" Foreground="White" Content="Создать аккаунт" FontSize="18" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+        <Button Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent" Foreground="#5DA892" Content="Уже есть аккаунт?" FontSize="12"/>
+
+    </Grid>
+</Window>
