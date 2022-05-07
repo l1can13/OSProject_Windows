@@ -29,7 +29,7 @@
         <TextBox x:Name="passwordBox" Grid.Row="3" Grid.Column="1" FontSize="11" Style="{StaticResource MyWaterMarkStyle}" Tag="Пароль"/>
 
         <Button Grid.Row="4" Grid.Column="1" Background="Transparent" Foreground="#5DA892" Content="Забыли пароль?" VerticalContentAlignment="Center" HorizontalContentAlignment="Right" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-        <Button Grid.Row="5" Grid.Column="1" Background="#5DA892" Foreground="white" Content="Вход" FontSize="18" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+        <Button Grid.Row="5" Grid.Column="1" Click="authButton_Click" Background="#5DA892" Foreground="white" Content="Вход" FontSize="18" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
         <Button Grid.Row="6" Grid.Column="1" Background="Transparent" Foreground="#5DA892" VerticalAlignment="Center" HorizontalAlignment="Center" Content="Зарегистрироваться" VerticalContentAlignment="Center" HorizontalContentAlignment="Right"/>
 
     </Grid>

@@ -40,7 +40,7 @@
 
         <TextBlock x:Name="titleTextBlock" Text="Файлы" Grid.Column="3" VerticalAlignment="Center" FontSize="24" Foreground="#FF5DA892" Grid.ColumnSpan="2" Margin="15,0,0,0" />
         <TextBlock x:Name="usernameTextBlock" Grid.Row="2" Grid.Column="1" Text="Имя" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontSize="24" FontFamily="El Messiri" Foreground="White" />
-        <TextBlock x:Name="userEmailTextBlock" Grid.Column="1" Grid.Row="3" Text="username@gmail.com" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="18" Foreground="White" />
+        <TextBlock x:Name="userEmailTextBlock" Grid.Column="1" Grid.Row="3" Text="username@gmail.com" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="14" Foreground="White" />
         <TextBlock x:Name="filenameTextBlock" Text="Название файла" Grid.Column="6" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="18" Grid.ColumnSpan="2"/>
 
         <TextBlock Text="Формат файла:" Grid.Row="1" Grid.Column="6" VerticalAlignment="Center" FontSize="12" Margin="20,0,0,0" Foreground="White" Grid.ColumnSpan="2" />
