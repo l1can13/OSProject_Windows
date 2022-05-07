@@ -48,10 +48,10 @@
         <TextBlock Text="Загрузил:" Grid.Row="3" Grid.Column="6" VerticalAlignment="Center" FontSize="12" Margin="20,0,0,0" Foreground="White" Grid.ColumnSpan="2" />
         <TextBlock Text="Дата загрузки:" Grid.Row="4" Grid.Column="6" VerticalAlignment="Center" FontSize="12" Margin="20,0,0,0" Foreground="White" Grid.ColumnSpan="2" />
 
-        <TextBlock Text="Скачать" Grid.Row="7" Grid.Column="7" VerticalAlignment="Center" FontSize="12" Margin="15,0,0,0" />
-        <TextBlock Text="Переименовать" Grid.Row="8" Grid.Column="7" VerticalAlignment="Center" FontSize="12" Margin="15,0,0,0" />
-        <TextBlock Text="Открыть доступ" Grid.Row="9" Grid.Column="7" VerticalAlignment="Center" FontSize="12" Margin="15,0,0,0" />
-        <TextBlock Text="Удалить" Grid.Row="10" Grid.Column="7" VerticalAlignment="Center" FontSize="12" Margin="15,0,0,0" />
+        <Button x:Name="downloadButton" Click="downloadButton_Click" Content="Скачать" Grid.Row="7" Grid.Column="7" Background="Transparent" VerticalAlignment="Center" FontSize="12" Margin="15,0,0,0" HorizontalContentAlignment="Left" />
+        <Button x:Name="renameButton" Click="renameButton_Click" Content="Переименовать" Grid.Row="8" Grid.Column="7" Background="Transparent" VerticalAlignment="Center" FontSize="12" Margin="15,0,0,0" HorizontalContentAlignment="Left" />
+        <Button x:Name="shareButton" Click="shareButton_Click" Content="Открыть доступ" Grid.Row="9" Grid.Column="7" Background="Transparent" VerticalAlignment="Center" FontSize="12" Margin="15,0,0,0" HorizontalContentAlignment="Left" />
+        <Button x:Name="deleteButton" Click="deleteButton_Click" Content="Удалить" Grid.Row="10" Grid.Column="7" Background="Transparent" VerticalAlignment="Center" FontSize="12" Margin="15,0,0,0" HorizontalContentAlignment="Left" />
 
         <Image Grid.Row="2" Grid.RowSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Source="account.png" Width="40" Height="40" Margin="26,11,25,11" />
         <Image Grid.Row="7" Grid.Column="6" Source="download.png" />

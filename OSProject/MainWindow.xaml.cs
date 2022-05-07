@@ -8,6 +8,7 @@ using System.IO;
 using FireSharp.Interfaces;
 using FireSharp.Config;
 using FireSharp.Response;
+using System.Windows.Controls;
 
 namespace OSProject
 {
@@ -106,7 +107,29 @@ namespace OSProject
             file.upload();
             filenamesList.Add(file.getFilename());
             saveList(filenamesList);
+            listViewFiles.ClearValue(ItemsControl.ItemsSourceProperty);
             listViewFiles.ItemsSource = filenamesList;
+        }
+
+        private void downloadButton_Click(object sender, RoutedEventArgs e)
+        {
+            FileCustom file = new FileCustom(listViewFiles.SelectedItem.ToString(), fbAuth);
+            file.download();
+        }
+
+        private void renameButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void shareButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void deleteButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

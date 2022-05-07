@@ -62,7 +62,7 @@ namespace OSProject
             ftpRequest.Method = WebRequestMethods.Ftp.DownloadFile;
 
             //Файлы будут копироваться в кталог программы
-            FileStream downloadedFile = new FileStream(this.filename, FileMode.Create, FileAccess.ReadWrite);
+            FileStream downloadedFile = new FileStream(Environment.SpecialFolder.Desktop.ToString() + "/" + this.filename, FileMode.Create, FileAccess.ReadWrite);
 
             FtpWebResponse ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
             //Получаем входящий поток
