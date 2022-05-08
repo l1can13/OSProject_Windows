@@ -89,11 +89,6 @@ namespace OSProject
             sideMenu.SelectedItem = filesItem;
 
             filenamesList = loadList();
-            //filenamesList.Add("hello1");
-            //filenamesList.Add("hello2");
-            //filenamesList.Add("hello3");
-            //filenamesList.Add("hello4");
-            //filenamesList.Add("hello5");
             listViewFiles.ItemsSource = filenamesList;
         }
 

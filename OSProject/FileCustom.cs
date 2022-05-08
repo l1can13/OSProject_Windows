@@ -35,7 +35,7 @@ namespace OSProject
 
             FileStream uploadedFile = new FileStream(this.filename, FileMode.Open, FileAccess.Read);
 
-            FtpWebRequest ftpRequest = (FtpWebRequest)WebRequest.Create("ftp://backup-storage5.hostiman.ru/var/www/s222776/data/" + shortName);
+            FtpWebRequest ftpRequest = (FtpWebRequest)WebRequest.Create("ftp://backup-storage5.hostiman.ru//" + shortName);
             ftpRequest.Credentials = new NetworkCredential("s222776", "Tmmm8eTKwZ9fHUqh");
             ftpRequest.Method = WebRequestMethods.Ftp.UploadFile;
 
@@ -55,31 +55,43 @@ namespace OSProject
 
         public void download()
         {
-            FtpWebRequest ftpRequest = (FtpWebRequest)WebRequest.Create("ftp://backup-storage5.hostiman.ru/var/www/s222776/data/" + this.fbAuth.LocalId + "/" + this.filename);
+            // Создаем объект FtpWebRequest
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://backup-storage5.hostiman.ru//" + this.fbAuth.LocalId + "/" + this.filename);
+            // устанавливаем метод на загрузку файлов
+            request.Method = WebRequestMethods.Ftp.DownloadFile;
+            request.UseBinary = true;
 
-            ftpRequest.Credentials = new NetworkCredential("s222776", "Tmmm8eTKwZ9fHUqh");
-            //команда фтп RETR
-            ftpRequest.Method = WebRequestMethods.Ftp.DownloadFile;
+            // если требуется логин и пароль, устанавливаем их
+            request.Credentials = new NetworkCredential("s222776", "Tmmm8eTKwZ9fHUqh");
 
-            //Файлы будут копироваться в кталог программы
-            FileStream downloadedFile = new FileStream(Environment.SpecialFolder.Desktop.ToString() + "/" + this.filename, FileMode.Create, FileAccess.ReadWrite);
-
-            FtpWebResponse ftpResponse = (FtpWebResponse)ftpRequest.GetResponse();
-            //Получаем входящий поток
-            Stream responseStream = ftpResponse.GetResponseStream();
-
-            //Буфер для считываемых данных
-            byte[] buffer = new byte[1024];
-            int size = 0;
-
-            while ((size = responseStream.Read(buffer, 0, 1024)) > 0)
+            try
             {
-                downloadedFile.Write(buffer, 0, size);
+                // получаем ответ от сервера в виде объекта FtpWebResponse
+                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                // получаем поток ответа
+                Stream responseStream = response.GetResponseStream();
+                // сохраняем файл в дисковой системе
+                // создаем поток для сохранения файла
+                Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\FileSharing");
+                FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\FileSharing\\" + this.filename, FileMode.Create);
 
+                //Буфер для считываемых данных
+                byte[] buffer = new byte[64];
+                int size = 0;
+
+                while ((size = responseStream.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    fs.Write(buffer, 0, size);
+
+                }
+                fs.Close();
+                response.Close();
             }
-            ftpResponse.Close();
-            downloadedFile.Close();
-            responseStream.Close();
+            catch (WebException e)
+            {
+                String status = ((FtpWebResponse)e.Response).StatusDescription;
+                Console.WriteLine(status);
+            }
         }
     }
 }
