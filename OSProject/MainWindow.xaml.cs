@@ -5,10 +5,10 @@ using System.Text.Json;
 using Firebase.Auth;
 using FireSharp;
 using System.IO;
-using FireSharp.Interfaces;
-using FireSharp.Config;
 using FireSharp.Response;
 using System.Windows.Controls;
+using System;
+using System.Diagnostics;
 
 namespace OSProject
 {
@@ -95,17 +95,25 @@ namespace OSProject
         private void addButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Multiselect = true;
             openFileDialog.ShowDialog();
 
-            FileCustom file = new FileCustom(openFileDialog.FileName, fbAuth);
-            file.upload();
-            if (filenamesList != null)
-                filenamesList.Add(openFileDialog.SafeFileName);
-            else
+            var filesForUpload = openFileDialog.FileNames;
+            var filesSafe = openFileDialog.SafeFileNames;
+
+            for (int i = 0; i < filesForUpload.Length; ++i)
             {
-                filenamesList = new List<string>();
-                filenamesList.Add(openFileDialog.SafeFileName);
+                FileCustom file = new FileCustom(filesForUpload[i], fbAuth);
+                file.upload();
+                if (filenamesList != null)
+                    filenamesList.Add(filesSafe[i]);
+                else
+                {
+                    filenamesList = new List<string>();
+                    filenamesList.Add(filesSafe[i]);
+                }
             }
+            
             saveList(filenamesList);
             listViewFiles.ClearValue(ItemsControl.ItemsSourceProperty);
             listViewFiles.ItemsSource = filenamesList;
@@ -113,8 +121,15 @@ namespace OSProject
 
         private void downloadButton_Click(object sender, RoutedEventArgs e)
         {
-            FileCustom file = new FileCustom(listViewFiles.SelectedItem.ToString(), fbAuth);
-            file.download();
+            var files = listViewFiles.SelectedItems;
+
+            for (int i = 0; i < files.Count; ++i)
+            {
+                FileCustom file = new FileCustom(files[i].ToString(), fbAuth);
+                file.download();
+            }
+
+            Process.Start("explorer", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\FileSharing");
         }
 
         private void renameButton_Click(object sender, RoutedEventArgs e)
@@ -141,6 +156,13 @@ namespace OSProject
             file.delete();
             filenamesList.Remove(file.getFilename());
             saveList(filenamesList);
+            listViewFiles.ClearValue(ItemsControl.ItemsSourceProperty);
+            listViewFiles.ItemsSource = filenamesList;
+        }
+
+        private void updateButton_Click(object sender, RoutedEventArgs e)
+        {
+            filenamesList = loadList();
             listViewFiles.ClearValue(ItemsControl.ItemsSourceProperty);
             listViewFiles.ItemsSource = filenamesList;
         }

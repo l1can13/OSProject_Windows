@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using ByteSizeLib;
 
 namespace OSProject
@@ -21,7 +17,6 @@ namespace OSProject
         {
             this.filename = filename;
             this.fbAuth = fbAuth;
-            this.uploadTime = DateTime.Now;
         }
 
         public string getTypeOfFile()
