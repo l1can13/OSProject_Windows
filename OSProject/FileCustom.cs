@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using ByteSizeLib;
 
 namespace OSProject
 {
@@ -23,9 +24,85 @@ namespace OSProject
             this.uploadTime = DateTime.Now;
         }
 
+        public string getTypeOfFile()
+        {
+            string buf = "";
+
+            for (int i = this.filename.Length - 1; this.filename[i] != '.'; --i)
+            {
+                buf += this.filename[i];
+            }
+
+            char[] charArray = buf.ToCharArray();
+            Array.Reverse(charArray);
+            return new string(charArray);
+        }
+
         public string getFilename()
         {
             return this.filename.Remove(0, this.filename.LastIndexOf("\\") + 1);
+        }
+
+        public string getUploadTime()
+        {
+            return this.uploadTime.ToString();
+        }
+
+        public double getSize()
+        {
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://backup-storage5.hostiman.ru//" + this.fbAuth.LocalId + "/" + this.filename);
+            request.Method = WebRequestMethods.Ftp.GetFileSize;
+            request.Credentials = new NetworkCredential("s222776", "Tmmm8eTKwZ9fHUqh");
+
+            try
+            {
+                FtpWebResponse ftpResponse = (FtpWebResponse)request.GetResponse();
+                long sizeBytes = ftpResponse.ContentLength;              
+                ftpResponse.Close();
+
+                var result = ByteSize.FromBits(sizeBytes);
+                return result.KiloBytes;
+            }
+            catch (WebException e)
+            {
+                Console.WriteLine(((FtpWebResponse)e.Response).StatusDescription);
+                return 0;
+            }
+        }
+
+        public void rename(String newName)
+        {
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://backup-storage5.hostiman.ru//" + this.fbAuth.LocalId + "/" + this.filename);
+            request.Method = WebRequestMethods.Ftp.Rename;
+            request.Credentials = new NetworkCredential("s222776", "Tmmm8eTKwZ9fHUqh");
+
+            try
+            {
+                request.RenameTo = newName;
+                FtpWebResponse ftpResponse = (FtpWebResponse)request.GetResponse();
+                ftpResponse.Close();
+            }
+            catch (WebException e)
+            {
+                Console.WriteLine(((FtpWebResponse)e.Response).StatusDescription);
+            }
+        }
+
+        public void delete()
+        {
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://backup-storage5.hostiman.ru//" + this.fbAuth.LocalId + "/" + this.filename);
+            request.Method = WebRequestMethods.Ftp.DeleteFile;
+            request.Credentials = new NetworkCredential("s222776", "Tmmm8eTKwZ9fHUqh");
+
+            try
+            {
+                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                response.Close();
+            }
+            catch (WebException e)
+            {
+                Console.WriteLine(((FtpWebResponse)e.Response).StatusDescription);
+            }
         }
 
         public void upload()

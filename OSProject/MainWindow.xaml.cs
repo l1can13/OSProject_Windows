@@ -97,10 +97,15 @@ namespace OSProject
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.ShowDialog();
 
-            string filename = openFileDialog.FileName;
             FileCustom file = new FileCustom(openFileDialog.FileName, fbAuth);
             file.upload();
-            filenamesList.Add(file.getFilename());
+            if (filenamesList != null)
+                filenamesList.Add(openFileDialog.SafeFileName);
+            else
+            {
+                filenamesList = new List<string>();
+                filenamesList.Add(openFileDialog.SafeFileName);
+            }
             saveList(filenamesList);
             listViewFiles.ClearValue(ItemsControl.ItemsSourceProperty);
             listViewFiles.ItemsSource = filenamesList;
@@ -114,7 +119,15 @@ namespace OSProject
 
         private void renameButton_Click(object sender, RoutedEventArgs e)
         {
+            FileCustom file = new FileCustom(listViewFiles.SelectedItem.ToString(), fbAuth);
+            string newFilename = Microsoft.VisualBasic.Interaction.InputBox("Введите текст:") + '.' + file.getTypeOfFile();
+            file.rename(newFilename);
+            int index = filenamesList.IndexOf(file.getFilename());
+            filenamesList[index] = newFilename;
 
+            saveList(filenamesList);
+            listViewFiles.ClearValue(ItemsControl.ItemsSourceProperty);
+            listViewFiles.ItemsSource = filenamesList;
         }
 
         private void shareButton_Click(object sender, RoutedEventArgs e)
@@ -124,7 +137,12 @@ namespace OSProject
 
         private void deleteButton_Click(object sender, RoutedEventArgs e)
         {
-
+            FileCustom file = new FileCustom(listViewFiles.SelectedItem.ToString(), fbAuth);
+            file.delete();
+            filenamesList.Remove(file.getFilename());
+            saveList(filenamesList);
+            listViewFiles.ClearValue(ItemsControl.ItemsSourceProperty);
+            listViewFiles.ItemsSource = filenamesList;
         }
     }
 }

@@ -43,10 +43,10 @@
         <TextBlock x:Name="userEmailTextBlock" Grid.Column="1" Grid.Row="3" Text="username@gmail.com" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="14" Foreground="White" />
         <TextBlock x:Name="filenameTextBlock" Text="Название файла" Grid.Column="6" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="18" Grid.ColumnSpan="2"/>
 
-        <TextBlock Text="Формат файла:" Grid.Row="1" Grid.Column="6" VerticalAlignment="Center" FontSize="12" Margin="20,0,0,0" Foreground="White" Grid.ColumnSpan="2" />
-        <TextBlock Text="Размер файла:" Grid.Row="2" Grid.Column="6" VerticalAlignment="Center" FontSize="12" Margin="20,0,0,0" Foreground="White" Grid.ColumnSpan="2" />
+        <TextBlock x:Name="typeOfFileTextBlock" Text="Формат файла:" Grid.Row="1" Grid.Column="6" VerticalAlignment="Center" FontSize="12" Margin="20,0,0,0" Foreground="White" Grid.ColumnSpan="2" />
+        <TextBlock x:Name="sizeOfFileTextBlock" Text="Размер файла:" Grid.Row="2" Grid.Column="6" VerticalAlignment="Center" FontSize="12" Margin="20,0,0,0" Foreground="White" Grid.ColumnSpan="2" />
         <TextBlock Text="Загрузил:" Grid.Row="3" Grid.Column="6" VerticalAlignment="Center" FontSize="12" Margin="20,0,0,0" Foreground="White" Grid.ColumnSpan="2" />
-        <TextBlock Text="Дата загрузки:" Grid.Row="4" Grid.Column="6" VerticalAlignment="Center" FontSize="12" Margin="20,0,0,0" Foreground="White" Grid.ColumnSpan="2" />
+        <TextBlock x:Name="uploadTimeTextBlock"  Text="Дата загрузки:" Grid.Row="4" Grid.Column="6" VerticalAlignment="Center" FontSize="12" Margin="20,0,0,0" Foreground="White" Grid.ColumnSpan="2" />
 
         <Button x:Name="downloadButton" Click="downloadButton_Click" Content="Скачать" Grid.Row="7" Grid.Column="7" Background="Transparent" VerticalAlignment="Center" FontSize="12" Margin="15,0,0,0" HorizontalContentAlignment="Left" />
         <Button x:Name="renameButton" Click="renameButton_Click" Content="Переименовать" Grid.Row="8" Grid.Column="7" Background="Transparent" VerticalAlignment="Center" FontSize="12" Margin="15,0,0,0" HorizontalContentAlignment="Left" />
