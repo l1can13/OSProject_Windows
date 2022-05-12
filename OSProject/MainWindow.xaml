@@ -37,22 +37,21 @@
         </Grid.ColumnDefinitions>
 
         <Rectangle Fill="#5DA892" IsHitTestVisible="False" Grid.Column="0" Grid.Row="0" Grid.RowSpan="7" Grid.ColumnSpan="2" Margin="0,0,0,5"/>
-        <Rectangle Fill="#5DA892" Grid.Column="7" Grid.RowSpan="5" RadiusX="25" RadiusY="34" Grid.ColumnSpan="2" Margin="0,62,0,0"/>
 
         <TextBlock x:Name="titleTextBlock" Text="Файлы" Grid.Column="3" VerticalAlignment="Center" FontSize="24" Foreground="#FF5DA892" Grid.ColumnSpan="3" Margin="15,0,0,0" Height="32" />
-        <TextBlock x:Name="usernameTextBlock" Grid.Row="2" Grid.Column="1" Text="Имя" HorizontalAlignment="Left" VerticalAlignment="Bottom" FontSize="24" FontFamily="El Messiri" Foreground="White" Margin="0,0,0,31" Grid.RowSpan="2" Height="28" Width="47" />
-        <TextBlock x:Name="userEmailTextBlock" Grid.Column="1" Grid.Row="3" Text="username@gmail.com" VerticalAlignment="Top" HorizontalAlignment="Left" FontSize="14" Foreground="White" Height="18" Width="138" />
-        <TextBlock x:Name="filenameTextBlock" Text="Название файла" Grid.Column="7" VerticalAlignment="Center" Margin="10,0,0,0" FontSize="18" Grid.ColumnSpan="2" Height="24"/>
+        <TextBlock x:Name="usernameTextBlock" Grid.Row="2" Grid.Column="1" Text="Имя" VerticalAlignment="Center" FontSize="24" FontFamily="El Messiri" Foreground="White" Margin="0,0,20,0"/>
+        <TextBlock x:Name="userEmailTextBlock" Grid.Column="1" Grid.Row="3" Text="username@gmail.com" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="14" Foreground="White" Margin="0,0,20,0" />
+        
+        <TextBlock x:Name="filenameTextBlock" Text="Название файла" Grid.Column="7" VerticalAlignment="Center" Margin="10,0,10,0" FontSize="18" Grid.ColumnSpan="2"/>
 
-        <TextBlock x:Name="typeOfFileTextBlock" Text="Формат файла:" Grid.Row="1" Grid.Column="7" VerticalAlignment="Center" FontSize="12" Margin="20,0,0,0" Foreground="White" Grid.ColumnSpan="2" Height="16" />
-        <TextBlock x:Name="sizeOfFileTextBlock" Text="Размер файла:" Grid.Row="2" Grid.Column="7" VerticalAlignment="Center" FontSize="12" Margin="20,0,0,0" Foreground="White" Grid.ColumnSpan="2" Height="16" />
-        <TextBlock Text="Загрузил:" Grid.Row="3" Grid.Column="7" VerticalAlignment="Center" FontSize="12" Margin="20,0,0,0" Foreground="White" Grid.ColumnSpan="2" Height="16" />
-        <TextBlock x:Name="uploadTimeTextBlock"  Text="Дата загрузки:" Grid.Row="4" Grid.Column="7" VerticalAlignment="Center" FontSize="12" Margin="20,0,0,0" Foreground="White" Grid.ColumnSpan="2" Height="16" />
+        <TextBlock x:Name="typeOfFileTextBlock" Text="Формат файла:" Grid.Row="1" Grid.Column="7" VerticalAlignment="Center" FontSize="12" Margin="10,0,10,0" Foreground="Black" Grid.ColumnSpan="2" />
+        <TextBlock x:Name="sizeOfFileTextBlock" Text="Размер файла:" Grid.Row="2" Grid.Column="7" VerticalAlignment="Center" FontSize="12" Margin="10,0,10,0" Foreground="Black" Grid.ColumnSpan="2" />
 
-        <Button x:Name="downloadButton" Click="downloadButton_Click" Content="Скачать" Grid.Row="7" Grid.Column="8" Background="Transparent" VerticalAlignment="Center" FontSize="12" Margin="15,0,0,0" HorizontalContentAlignment="Left" Height="16" />
-        <Button x:Name="renameButton" Click="renameButton_Click" Content="Переименовать" Grid.Row="8" Grid.Column="8" Background="Transparent" VerticalAlignment="Center" FontSize="12" Margin="15,0,0,0" HorizontalContentAlignment="Left" Height="16" />
-        <Button x:Name="shareButton" Click="shareButton_Click" Content="Открыть доступ" Grid.Row="9" Grid.Column="8" Background="Transparent" VerticalAlignment="Center" FontSize="12" Margin="15,0,0,0" HorizontalContentAlignment="Left" Height="16" />
-        <Button x:Name="deleteButton" Click="deleteButton_Click" Content="Удалить" Grid.Row="10" Grid.Column="8" Background="Transparent" VerticalAlignment="Center" FontSize="12" Margin="15,0,0,0" HorizontalContentAlignment="Left" Height="16" />
+        <Button x:Name="downloadButton" Click="downloadButton_Click" Content="Скачать" Grid.Row="7" Grid.Column="8" Background="Transparent" VerticalAlignment="Center" FontSize="12" Margin="15,0,0,0" HorizontalContentAlignment="Left" />
+        <Button x:Name="renameButton" Click="renameButton_Click" Content="Переименовать" Grid.Row="8" Grid.Column="8" Background="Transparent" VerticalAlignment="Center" FontSize="12" Margin="15,0,0,0" HorizontalContentAlignment="Left" />
+        <Button x:Name="shareButton" Click="shareButton_Click" Content="Открыть доступ" Grid.Row="9" Grid.Column="8" Background="Transparent" VerticalAlignment="Center" FontSize="12" Margin="15,0,0,0" HorizontalContentAlignment="Left" />
+        <Button x:Name="deleteButton" Click="deleteButton_Click" Content="Удалить" Grid.Row="10" Grid.Column="8" Background="Transparent" VerticalAlignment="Center" FontSize="12" Margin="15,0,0,0" HorizontalContentAlignment="Left" />
+        <Button x:Name="backToFilesButton" Visibility="Hidden" Click="backToFilesButton_Click" Content="Вернуть из корзины" Grid.Row="11" Grid.Column="8" Background="Transparent" VerticalAlignment="Center" FontSize="12" Margin="15,0,0,0" HorizontalContentAlignment="Left"/>
 
         <Image Grid.Row="2" Grid.RowSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Source="account.png" Width="40" Height="40" />
         <Image Grid.Row="7" Grid.Column="7" Source="download.png" />
@@ -63,32 +62,14 @@
         <Button x:Name="addButton" Grid.Row="3" Grid.Column="3" Margin="15,0,0,0" Background="#5DA892" Content="Добавить" Foreground="White" Click="addButton_Click"/>
         <Button x:Name="updateButton" Grid.Row="3" Grid.Column="5" Margin="0,0,15,0" Background="#5DA892" Content="Обновить список" Foreground="White" Click="updateButton_Click"/>
 
-        <ListView x:Name="sideMenu" BorderThickness="0" Grid.Row="7" Grid.ColumnSpan="2" Grid.RowSpan="5" Background="#5DA892">
-            <ListViewItem x:Name="filesItem" Height="40">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="folders.png" VerticalAlignment="Center"/>
-                    <TextBlock Text="Файлы" VerticalAlignment="Center" Margin="25, 0, 0, 0" Foreground="white" FontSize="14" FontFamily="el_messiri"/>
-                </StackPanel>
-            </ListViewItem>
-            <ListViewItem x:Name="generalItem" Height="40">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="general.png" VerticalAlignment="Center"/>
-                    <TextBlock Text="Общее" VerticalAlignment="Center" Margin="25, 0, 0, 0" Foreground="white" FontSize="14" FontFamily="el_messiri"/>
-                </StackPanel>
-            </ListViewItem>
-            <ListViewItem x:Name="accountItem" Height="40">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="account.png" VerticalAlignment="Center"/>
-                    <TextBlock Text="Аккаунт" VerticalAlignment="Center" Margin="25, 0, 0, 0" Foreground="white" FontSize="14" FontFamily="el_messiri"/>
-                </StackPanel>
-            </ListViewItem>
-        </ListView>
+        <Button x:Name="filesButton" Click="filesButton_Click" Grid.Row="7" Grid.ColumnSpan="2" Background="#5DA892" Foreground="White" Content="Файлы" FontSize="14"/>
+        <Button x:Name="trashButton" Click="trashButton_Click" Grid.Row="9" Grid.ColumnSpan="2" Background="#5DA892" Foreground="White" Content="Корзина" FontSize="14"/>
 
         <Border Grid.Column="3" Grid.ColumnSpan="3" Margin="15,62,15,0" CornerRadius="13" BorderBrush="#5DA892" BorderThickness="2" Grid.RowSpan="2">
             <TextBox x:Name="findBox" BorderThickness="0" VerticalContentAlignment="Center" Foreground="Gray" Background="Transparent" Margin="5, 5, 5, 5"/>
         </Border>
 
-        <ListView x:Name="listViewFiles" Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="3" Grid.RowSpan="10" BorderThickness="0" Margin="0,32,0,0">
+        <ListView x:Name="listViewFiles" SelectionChanged="listViewFiles_SelectionChanged" Grid.Row="4" Grid.Column="3" Grid.ColumnSpan="3" Grid.RowSpan="10" BorderThickness="0" Margin="0,32,0,0">
 
         </ListView>
     </Grid>

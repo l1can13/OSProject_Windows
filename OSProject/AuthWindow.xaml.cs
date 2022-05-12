@@ -30,8 +30,6 @@ namespace OSProject
         public AuthWindow()
         {
             InitializeComponent();
-            
-
         }
 
         public static FirebaseAuth getFbAuth()
@@ -44,7 +42,7 @@ namespace OSProject
             try
             {
                 fbAuth = auth.SignInWithEmailAndPasswordAsync(userEmail, userPassword).Result;
-                string fileName = "C:\\Users\\lican\\source\\repos\\OSProject_Windows\\OSProject\\token.json";
+                string fileName = "token.json";
                 string jsonString = JsonSerializer.Serialize(fbAuth.FirebaseToken);
                 File.WriteAllText(fileName, jsonString);
             }
