@@ -9,12 +9,11 @@ using FireSharp.Response;
 using System.Windows.Controls;
 using System;
 using System.Diagnostics;
+using System.Linq;
+using Newtonsoft.Json;
 
 namespace OSProject
 {
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         private FirebaseAuthProvider auth = new FirebaseAuthProvider(new Firebase.Auth.FirebaseConfig("AIzaSyApQwuz8TKJ6rZ9rqnBOt4vLOLCGAfvntI"));
@@ -51,15 +50,64 @@ namespace OSProject
             FirebaseClient client = new FirebaseClient(config);
             client.Set<List<string>>("User_Data/" + fbAuth.LocalId + "/Current", filenamesList);
         }
+
+        bool IsDigit(string str)
+        {
+            foreach (char elem in str)
+            {
+                if (!Char.IsDigit(elem))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         public List<string> loadList()
         {
             List<string> list = new List<string>();
 
-            FirebaseClient client = new FirebaseClient(config);
-            FirebaseResponse firebaseResponse = client.Get("User_Data/" + fbAuth.LocalId + "/Current");
-            list = firebaseResponse.ResultAs<List<string>>();
+            try
+            {
+                FirebaseClient client = new FirebaseClient(config);
+                FirebaseResponse firebaseResponse = client.Get("User_Data/" + fbAuth.LocalId + "/Current/");
+                list = firebaseResponse.ResultAs<List<string>>();
 
-            return list;
+                return list;
+            }
+            catch (Newtonsoft.Json.JsonSerializationException)
+            {
+                FirebaseClient client = new FirebaseClient(config);
+                FirebaseResponse firebaseResponse = client.Get("User_Data/" + fbAuth.LocalId + "/Current/");
+
+                string temp = firebaseResponse.Body;
+
+                temp = temp.Insert(temp.IndexOf('['), "'").Insert(temp.IndexOf(']') + 2, "'");
+
+                Dictionary<string, string> dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(temp);
+
+                foreach (var elem in dict)
+                {
+                    if (IsDigit(elem.Key))
+                    {
+                        list.Add(elem.Value);
+                    }
+                    else
+                    {
+                        list.Add(elem.Key);
+                    }
+                }
+
+                return list;
+            }
+
+        }
+
+        public string getUsername()
+        {
+            FirebaseClient client = new FirebaseClient(config);
+            return client.Get("User_Info/" + fbAuth.LocalId + "/username").ResultAs<string>();
         }
 
         public void setUser(string token)
@@ -75,7 +123,7 @@ namespace OSProject
             {
                 string fileName = "token.json";
                 string jsonString = File.ReadAllText(fileName);
-                token = JsonSerializer.Deserialize<string>(jsonString);
+                token = System.Text.Json.JsonSerializer.Deserialize<string>(jsonString);
             }
             catch (FileNotFoundException e)
             {
@@ -83,18 +131,30 @@ namespace OSProject
                 authWindow.ShowDialog();
                 string fileName = "token.json";
                 string jsonString = File.ReadAllText(fileName);
-                token = JsonSerializer.Deserialize<string>(jsonString);
+                token = System.Text.Json.JsonSerializer.Deserialize<string>(jsonString);
             }
-            catch (JsonException e)
+            catch (System.Text.Json.JsonException e)
             {
                 AuthWindow authWindow = new AuthWindow();
                 authWindow.ShowDialog();
                 string fileName = "token.json";
                 string jsonString = File.ReadAllText(fileName);
-                token = JsonSerializer.Deserialize<string>(jsonString);
+                token = System.Text.Json.JsonSerializer.Deserialize<string>(jsonString);
             }
 
-            setUser(token);
+            try
+            {
+                setUser(token);
+            }
+            catch (System.AggregateException e)
+            {
+                AuthWindow authWindow = new AuthWindow();
+                authWindow.ShowDialog();
+                string fileName = "token.json";
+                string jsonString = File.ReadAllText(fileName);
+                token = System.Text.Json.JsonSerializer.Deserialize<string>(jsonString);
+                setUser(token);
+            }
 
             if (token == null)
             {
@@ -102,7 +162,7 @@ namespace OSProject
                 authWindow.ShowDialog();
             }
 
-            usernameTextBlock.Text = fbAuth.LocalId;
+            usernameTextBlock.Text = getUsername();
             userEmailTextBlock.Text = fbAuth.Email;
 
             trashList = loadTrash();
@@ -131,7 +191,7 @@ namespace OSProject
                     filenamesList.Add(filesSafe[i]);
                 }
             }
-            
+
             saveList(filenamesList);
             listViewFiles.ClearValue(ItemsControl.ItemsSourceProperty);
             listViewFiles.ItemsSource = filenamesList;
@@ -144,7 +204,14 @@ namespace OSProject
             for (int i = 0; i < files.Count; ++i)
             {
                 FileCustom file = new FileCustom(files[i].ToString(), fbAuth);
-                file.download(isTrash);
+                if (file.getFilename().EndsWith("-folder"))
+                {
+                    file.download_folder();
+                }
+                else
+                {
+                    file.download(isTrash);
+                }
             }
 
             Process.Start("explorer", Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\FileSharing");
@@ -153,7 +220,15 @@ namespace OSProject
         private void renameButton_Click(object sender, RoutedEventArgs e)
         {
             FileCustom file = new FileCustom(listViewFiles.SelectedItem.ToString(), fbAuth);
-            string newFilename = Microsoft.VisualBasic.Interaction.InputBox("Введите текст:") + '.' + file.getTypeOfFile();
+            string newFilename;
+            if (file.getFilename().EndsWith("-folder"))
+            {
+                newFilename = Microsoft.VisualBasic.Interaction.InputBox("Введите текст:") + "-folder";
+            }
+            else
+            {
+                newFilename = Microsoft.VisualBasic.Interaction.InputBox("Введите текст:") + '.' + file.getTypeOfFile();
+            }
             file.rename(newFilename, isTrash);
             int index = filenamesList.IndexOf(file.getFilename());
             filenamesList[index] = newFilename;
@@ -163,43 +238,52 @@ namespace OSProject
             listViewFiles.ItemsSource = filenamesList;
         }
 
-        private void shareButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
         private void deleteButton_Click(object sender, RoutedEventArgs e)
         {
-            FileCustom file = new FileCustom(listViewFiles.SelectedItem.ToString(), fbAuth);
-
-            if (isTrash)
+            List<string> temp = listViewFiles.SelectedItems.Cast<string>().ToList();
+            for (int i = 0; i < temp.Count; ++i)
             {
-                file.delete(isTrash);
-                trashList.Remove(file.getFilename());
+                FileCustom file = new FileCustom(temp[i], fbAuth);
 
-                saveTrash();
-                listViewFiles.ClearValue(ItemsControl.ItemsSourceProperty);
-                listViewFiles.ItemsSource = trashList;
-            }
-            else
-            {
-                file.move_to_trash();
-                filenamesList.Remove(file.getFilename());
-                saveList(filenamesList);
-
-                if (trashList != null)
+                if (isTrash)
                 {
-                    trashList.Add(file.getFilename());
+                    file.delete(isTrash);
+                    trashList.Remove(file.getFilename());
+
+                    saveTrash();
+
+                    listViewFiles.ClearValue(ItemsControl.ItemsSourceProperty);
+                    listViewFiles.ItemsSource = trashList;
                 }
                 else
                 {
-                    trashList = new List<string>();
-                    trashList.Add(file.getFilename());
-                }
-                saveTrash();
+                    if (file.getFilename().EndsWith("-folder"))
+                    {
+                        file.delete_directory();
 
-                listViewFiles.ClearValue(ItemsControl.ItemsSourceProperty);
-                listViewFiles.ItemsSource = filenamesList;
+                        filenamesList.Remove(file.getFilename());
+                        saveList(filenamesList);
+                    }
+                    else
+                    {
+                        file.move_to_trash();
+                        filenamesList.Remove(file.getFilename());
+                        saveList(filenamesList);
+
+                        if (trashList != null)
+                        {
+                            trashList.Add(file.getFilename());
+                        }
+                        else
+                        {
+                            trashList = new List<string>();
+                            trashList.Add(file.getFilename());
+                        }
+                        saveTrash();
+                    }
+                    listViewFiles.ClearValue(ItemsControl.ItemsSourceProperty);
+                    listViewFiles.ItemsSource = filenamesList;
+                }
             }
         }
 
@@ -221,19 +305,33 @@ namespace OSProject
 
         private void listViewFiles_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //FileCustom file = new FileCustom(listViewFiles.SelectedItem.ToString(), fbAuth);
+            if (listViewFiles.SelectedItem != null)
+            {
+                FileCustom file = new FileCustom(listViewFiles.SelectedItem.ToString(), fbAuth);
 
-            //filenameTextBlock.Text = file.getFilename();
-            //typeOfFileTextBlock.Text = "Формат файла: " + file.getTypeOfFile();
+                filenameTextBlock.Text = file.getFilename();
+                typeOfFileTextBlock.Text = "Формат файла: " + file.getTypeOfFile();
+            }
+            else
+            {
+                filenameTextBlock.Text = "Название файла";
+                typeOfFileTextBlock.Text = "Формат файла: ";
+            }
         }
 
         private void filesButton_Click(object sender, RoutedEventArgs e)
         {
             titleTextBlock.Text = "Файлы";
             filenamesList = loadList();
+
             isTrash = false;
+
             backToFilesButton.Visibility = Visibility.Hidden;
+            return_back_image.Visibility = Visibility.Hidden;
+
             renameButton.Visibility = Visibility.Visible;
+            rename_image.Visibility = Visibility.Visible;
+
             listViewFiles.ItemsSource = filenamesList;
         }
 
@@ -241,26 +339,63 @@ namespace OSProject
         {
             titleTextBlock.Text = "Корзина";
             trashList = loadTrash();
+
             isTrash = true;
+
             backToFilesButton.Visibility = Visibility.Visible;
+            return_back_image.Visibility = Visibility.Visible;
+
             renameButton.Visibility = Visibility.Hidden;
+            rename_image.Visibility = Visibility.Hidden;
+
             listViewFiles.ItemsSource = trashList;
         }
 
         private void backToFilesButton_Click(object sender, RoutedEventArgs e)
         {
-            FileCustom file = new FileCustom(listViewFiles.SelectedItem.ToString(), fbAuth);
+            for (int i = 0; i < listViewFiles.SelectedItems.Count; ++i)
+            {
+                FileCustom file = new FileCustom(listViewFiles.SelectedItems[i].ToString(), fbAuth);
 
-            filenamesList.Add(file.getFilename());
-            saveList(filenamesList);
+                filenamesList.Add(file.getFilename());
+                saveList(filenamesList);
 
-            trashList.Remove(file.getFilename());
-            saveTrash();
+                trashList.Remove(file.getFilename());
+                saveTrash();
 
-            file.rename(file.getFilename(), isTrash);
-
+                file.rename(file.getFilename(), isTrash);
+            }
             listViewFiles.ClearValue(ItemsControl.ItemsSourceProperty);
             listViewFiles.ItemsSource = trashList;
+        }
+
+        private void quit_Click(object sender, RoutedEventArgs e)
+        {
+            string fileName = "token.json";
+            File.Delete(fileName);
+            Environment.Exit(0);
+        }
+
+        private void findButton_Click(object sender, RoutedEventArgs e)
+        {
+            List<string> temp = new List<string>();
+            if (findBox.Text != "")
+            {
+                for (int i = listViewFiles.Items.Count - 1; i >= 0; --i)
+                {
+                    var item = listViewFiles.Items[i];
+                    if (item.ToString().ToLower().Contains(findBox.Text.ToLower()))
+                    {
+                        temp.Add(item.ToString());
+                    }
+                }
+                listViewFiles.ItemsSource = temp;
+            }
+            else
+            {
+                if (isTrash) listViewFiles.ItemsSource = trashList;
+                else listViewFiles.ItemsSource = filenamesList;
+            }
         }
     }
 }

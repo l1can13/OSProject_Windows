@@ -20,21 +20,14 @@ using System.IO;
 
 namespace OSProject
 {
-    /// <summary>
-    /// Логика взаимодействия для Window1.xaml
-    /// </summary>
     public partial class AuthWindow : Window
     {
         FirebaseAuthProvider auth = new FirebaseAuthProvider(new FirebaseConfig("AIzaSyApQwuz8TKJ6rZ9rqnBOt4vLOLCGAfvntI"));
         private static FirebaseAuth fbAuth;
+
         public AuthWindow()
         {
             InitializeComponent();
-        }
-
-        public static FirebaseAuth getFbAuth()
-        {
-            return fbAuth;
         }
 
         public void SignIn(string userEmail, string userPassword)
@@ -63,6 +56,13 @@ namespace OSProject
             {
                 MessageBox.Show("Нет подключения к интернету или проблема с серверами!");
             }
+        }
+
+        private void registrationButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+            RegistrationWindow registration = new RegistrationWindow();
+            registration.ShowDialog();
         }
     }
 }

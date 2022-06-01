@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
+using System.Text;
 using ByteSizeLib;
 
 namespace OSProject
@@ -23,14 +26,21 @@ namespace OSProject
         {
             string buf = "";
 
-            for (int i = this.filename.Length - 1; this.filename[i] != '.'; --i)
+            if (this.filename.EndsWith("-folder"))
             {
-                buf += this.filename[i];
+                return "Папка";
             }
+            else
+            {
+                for (int i = this.filename.Length - 1; this.filename[i] != '.' && i > 0; --i)
+                {
+                    buf += this.filename[i];
+                }
 
-            char[] charArray = buf.ToCharArray();
-            Array.Reverse(charArray);
-            return new string(charArray);
+                char[] charArray = buf.ToCharArray();
+                Array.Reverse(charArray);
+                return new string(charArray);
+            }
         }
 
         public string getFilename()
@@ -139,6 +149,64 @@ namespace OSProject
             }
         }
 
+        public void delete_directory()
+        {
+            List<string> files = GetFileList();
+            FtpWebRequest request;
+            foreach (string file in files)
+            {
+                request = (FtpWebRequest)WebRequest.Create("ftp://backup-storage5.hostiman.ru//" + this.fbAuth.LocalId + "/" + this.filename + "/" + file);
+                request.Method = WebRequestMethods.Ftp.DeleteFile;
+                request.UseBinary = true;
+
+                // если требуется логин и пароль, устанавливаем их
+                request.Credentials = new NetworkCredential("s222776", "Tmmm8eTKwZ9fHUqh");
+
+                try
+                {
+                    // получаем ответ от сервера в виде объекта FtpWebResponse
+                    FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                    // получаем поток ответа
+                    Stream responseStream = response.GetResponseStream();
+                    // сохраняем файл в дисковой системе
+                    // создаем поток для сохранения файла
+                    Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\FileSharing");
+                    FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\FileSharing\\" + file, FileMode.Create);
+
+                    //Буфер для считываемых данных
+                    byte[] buffer = new byte[64];
+                    int size = 0;
+
+                    while ((size = responseStream.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        fs.Write(buffer, 0, size);
+
+                    }
+                    fs.Close();
+                    response.Close();
+                }
+                catch (WebException e)
+                {
+                    String status = ((FtpWebResponse)e.Response).StatusDescription;
+                    Console.WriteLine(status);
+                }
+            }
+
+            request = (FtpWebRequest)WebRequest.Create("ftp://backup-storage5.hostiman.ru//" + this.fbAuth.LocalId + "/" + this.filename);
+            request.Method = WebRequestMethods.Ftp.RemoveDirectory;
+            request.Credentials = new NetworkCredential("s222776", "Tmmm8eTKwZ9fHUqh");
+
+            try
+            {
+                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                response.Close();
+            }
+            catch (WebException e)
+            {
+                Console.WriteLine(((FtpWebResponse)e.Response).StatusDescription);
+            }
+        }
+
         public void move_to_trash()
         {
             FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://backup-storage5.hostiman.ru//" + this.fbAuth.LocalId + "/" + this.filename);
@@ -157,29 +225,140 @@ namespace OSProject
             }
         }
 
+        bool CheckIfFtpDirectoryExists()
+        {
+            FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://backup-storage5.hostiman.ru//" + this.fbAuth.LocalId);
+            request.Credentials = new NetworkCredential("s222776", "Tmmm8eTKwZ9fHUqh");
+            request.Method = WebRequestMethods.Ftp.GetFileSize;
+
+            try
+            {
+                FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+            }
+            catch (WebException ex)
+            {
+                FtpWebResponse response = (FtpWebResponse)ex.Response;
+                if (FtpStatusCode.ActionNotTakenFileUnavailable == response.StatusCode)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         public void upload()
         {
-            // для имени файла
-            string shortName = fbAuth.LocalId + "/" + this.filename.Remove(0, this.filename.LastIndexOf("\\") + 1);
+            FtpWebRequest ftpRequest;
+            try
+            {
+                if (CheckIfFtpDirectoryExists())
+                {
+                    ftpRequest = (FtpWebRequest)WebRequest.Create("ftp://backup-storage5.hostiman.ru//" + this.fbAuth.LocalId);
+                    ftpRequest.Credentials = new NetworkCredential("s222776", "Tmmm8eTKwZ9fHUqh");
+                    ftpRequest.Method = WebRequestMethods.Ftp.MakeDirectory;
 
-            FileStream uploadedFile = new FileStream(this.filename, FileMode.Open, FileAccess.Read);
+                    FtpWebResponse response = (FtpWebResponse)ftpRequest.GetResponse();
 
-            FtpWebRequest ftpRequest = (FtpWebRequest)WebRequest.Create("ftp://backup-storage5.hostiman.ru//" + shortName);
-            ftpRequest.Credentials = new NetworkCredential("s222776", "Tmmm8eTKwZ9fHUqh");
-            ftpRequest.Method = WebRequestMethods.Ftp.UploadFile;
+                    response.Close();
+                }
+                // для имени файла
+                string shortName = fbAuth.LocalId + "/" + this.filename.Remove(0, this.filename.LastIndexOf("\\") + 1);
 
-            // Буфер для загружаемых данных
-            byte[] file_to_bytes = new byte[uploadedFile.Length];
-            // Считываем данные в буфер
-            uploadedFile.Read(file_to_bytes, 0, file_to_bytes.Length);
+                FileStream uploadedFile = new FileStream(this.filename, FileMode.Open, FileAccess.Read);
 
-            uploadedFile.Close();
+                ftpRequest = (FtpWebRequest)WebRequest.Create("ftp://backup-storage5.hostiman.ru//" + shortName);
+                ftpRequest.Credentials = new NetworkCredential("s222776", "Tmmm8eTKwZ9fHUqh");
+                ftpRequest.Method = WebRequestMethods.Ftp.UploadFile;
 
-            // Поток для загрузки файла 
-            Stream writer = ftpRequest.GetRequestStream();
+                // Буфер для загружаемых данных
+                byte[] file_to_bytes = new byte[uploadedFile.Length];
+                // Считываем данные в буфер
+                uploadedFile.Read(file_to_bytes, 0, file_to_bytes.Length);
 
-            writer.Write(file_to_bytes, 0, file_to_bytes.Length);
-            writer.Close();
+                uploadedFile.Close();
+
+                // Поток для загрузки файла 
+                Stream writer = ftpRequest.GetRequestStream();
+
+                writer.Write(file_to_bytes, 0, file_to_bytes.Length);
+                writer.Close();
+            }
+            catch (WebException e)
+            {
+                String status = ((FtpWebResponse)e.Response).StatusDescription;
+                Console.WriteLine(status);
+            }
+        }
+
+        public List<string> GetFileList()
+        {
+            List<string> list = new List<string>();
+            try
+            {
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://backup-storage5.hostiman.ru//" + this.fbAuth.LocalId + "/" + this.filename + "/");
+                request.Method = WebRequestMethods.Ftp.ListDirectory;
+
+                request.Credentials = new NetworkCredential("s222776", "Tmmm8eTKwZ9fHUqh");
+                var response = (FtpWebResponse)request.GetResponse();
+                var stream = response.GetResponseStream();
+                var reader = new StreamReader(stream, true);
+                while (!reader.EndOfStream)
+                {
+                    list.Add(reader.ReadLine());
+                }
+                reader.Close();
+                stream.Close();
+                response.Close();
+
+                return list;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public void download_folder()
+        {
+            List<string> files = GetFileList();
+            foreach (string file in files)
+            {
+                FtpWebRequest request = (FtpWebRequest)WebRequest.Create("ftp://backup-storage5.hostiman.ru//" + this.fbAuth.LocalId + "/" + this.filename + "/" + file);
+                request.Method = WebRequestMethods.Ftp.DownloadFile;
+                request.UseBinary = true;
+
+                // если требуется логин и пароль, устанавливаем их
+                request.Credentials = new NetworkCredential("s222776", "Tmmm8eTKwZ9fHUqh");
+
+                try
+                {
+                    // получаем ответ от сервера в виде объекта FtpWebResponse
+                    FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+                    // получаем поток ответа
+                    Stream responseStream = response.GetResponseStream();
+                    // сохраняем файл в дисковой системе
+                    // создаем поток для сохранения файла
+                    Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\FileSharing");
+                    FileStream fs = new FileStream(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + "\\FileSharing\\" + file, FileMode.Create);
+
+                    //Буфер для считываемых данных
+                    byte[] buffer = new byte[64];
+                    int size = 0;
+
+                    while ((size = responseStream.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        fs.Write(buffer, 0, size);
+
+                    }
+                    fs.Close();
+                    response.Close();
+                }
+                catch (WebException e)
+                {
+                    String status = ((FtpWebResponse)e.Response).StatusDescription;
+                    Console.WriteLine(status);
+                }
+            }
         }
 
         public void download(bool isTrash)

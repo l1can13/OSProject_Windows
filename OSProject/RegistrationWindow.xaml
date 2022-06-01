@@ -27,13 +27,13 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <TextBox FontSize="11" Grid.Row="1" Grid.Column="1" Style="{StaticResource MyWaterMarkStyle}" Tag="Имя пользователя"/>
-        <TextBox FontSize="11" Grid.Row="3" Grid.Column="1" Style="{StaticResource MyWaterMarkStyle}" Tag="Электронная почта"/>
-        <TextBox FontSize="11" Grid.Row="5" Grid.Column="1" Style="{StaticResource MyWaterMarkStyle}" Tag="Номер телефона"/>
-        <TextBox FontSize="11" Grid.Row="7" Grid.Column="1" Style="{StaticResource MyWaterMarkStyle}" Tag="Пароль"/>
+        <TextBox x:Name="username" FontSize="11" Grid.Row="1" Grid.Column="1" Style="{StaticResource MyWaterMarkStyle}" Tag="Имя пользователя"/>
+        <TextBox x:Name="email" FontSize="11" Grid.Row="3" Grid.Column="1" Style="{StaticResource MyWaterMarkStyle}" Tag="Электронная почта"/>
+        <TextBox x:Name="phonenumber" FontSize="11" Grid.Row="5" Grid.Column="1" Style="{StaticResource MyWaterMarkStyle}" Tag="Номер телефона"/>
+        <TextBox x:Name="password" FontSize="11" Grid.Row="7" Grid.Column="1" Style="{StaticResource MyWaterMarkStyle}" Tag="Пароль"/>
 
-        <Button Grid.Row="9" Grid.Column="1" Background="#5DA892" Foreground="White" Content="Создать аккаунт" FontSize="18" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
-        <Button Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent" Foreground="#5DA892" Content="Уже есть аккаунт?" FontSize="12"/>
+        <Button x:Name="create_account" Click="create_account_Click" Grid.Row="9" Grid.Column="1" Background="#5DA892" Foreground="White" Content="Создать аккаунт" FontSize="18" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+        <Button x:Name="already_have_account" Click="already_have_account_Click" Grid.Row="10" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent" Foreground="#5DA892" Content="Уже есть аккаунт?" FontSize="12"/>
 
     </Grid>
 </Window>
